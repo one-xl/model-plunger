@@ -1,0 +1,16 @@
+node_modules
+apps/*/node_modules
+apps/api/dev.db
+apps/api/dev.db-journal
+apps/api/prisma/vitest.db
+apps/api/prisma/vitest.db-journal
+apps/web/dist
+apps/api/dist
+.env
+.kilo
+*.log
+*.tsbuildinfo
+/home*.png
+/add*.png
+/connect*.png
+/mobile*.png

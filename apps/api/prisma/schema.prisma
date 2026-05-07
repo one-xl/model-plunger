@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Provider {
+  id                  String         @id @default(cuid())
+  name                String
+  slug                String         @unique
+  description         String?
+  docsUrl             String
+  officialWebsite     String?
+  isOpenAICompatible  Boolean?
+  compatibleLevel     String?
+  baseUrl             String?
+  authType            String?
+  authHeaderName      String?
+  authHeaderTemplate  String?
+  chatCompletionsPath String?
+  embeddingsPath      String?
+  modelsPath          String?
+  rawAnalysisJson     String
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+  models              ProviderModel[]
+  docs                ProviderDoc[]
+  codeExamples        CodeExample[]
+  commonErrors        CommonError[]
+  testRecords         TestRecord[]
+}
+
+model ProviderModel {
+  id                String   @id @default(cuid())
+  providerId        String
+  name              String
+  type              String?
+  contextWindow     Int?
+  maxOutputTokens   Int?
+  supportsStreaming Boolean?
+  supportsVision    Boolean?
+  supportsTools     Boolean?
+  supportsJsonMode  Boolean?
+  notes             String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  provider          Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+}
+
+model ProviderDoc {
+  id              String   @id @default(cuid())
+  providerId      String
+  url             String
+  title           String?
+  contentMarkdown String
+  contentHash     String
+  crawledAt       DateTime @default(now())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  provider        Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+}
+
+model CodeExample {
+  id         String   @id @default(cuid())
+  providerId String
+  language   String
+  code       String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  provider   Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+}
+
+model CommonError {
+  id         String   @id @default(cuid())
+  providerId String
+  error      String
+  reason     String?
+  solution   String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  provider   Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+}
+
+model TestRecord {
+  id            String   @id @default(cuid())
+  providerId    String?
+  providerName  String
+  baseUrlMasked String
+  modelName     String?
+  testType      String
+  success       Boolean
+  httpStatus    Int?
+  latencyMs     Int
+  // upstream usage JSON (truncated); no API keys
+  usageSnapshot String?
+  errorType     String?
+  reason        String?
+  suggestion    String?
+  createdAt     DateTime @default(now())
+  provider      Provider? @relation(fields: [providerId], references: [id], onDelete: SetNull)
+}

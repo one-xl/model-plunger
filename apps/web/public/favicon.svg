@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Model Plunger 站点图标">
+  <defs>
+    <linearGradient id="mp-bell" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f97316"/>
+      <stop offset="1" stop-color="#ef4444"/>
+    </linearGradient>
+    <linearGradient id="mp-glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset="1" stop-color="#0b1326"/>
+    </linearGradient>
+    <radialGradient id="mp-glow" cx="50%" cy="55%" r="55%">
+      <stop offset="0" stop-color="#0d9488" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#0d9488" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="64" height="64" rx="14" fill="url(#mp-glass)"/>
+  <circle cx="32" cy="34" r="22" fill="url(#mp-glow)">
+    <animate attributeName="r" values="20;24;20" dur="3.6s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.85;1;0.85" dur="3.6s" repeatCount="indefinite"/>
+  </circle>
+
+  <path d="M30 7h4v28h-4z" fill="#f8fafc"/>
+  <rect x="27" y="6" width="10" height="5" rx="2" fill="#0d9488"/>
+
+  <g>
+    <path d="M20 33c0-6 24-6 24 0v4c0 5-5 9-12 9s-12-4-12-9z" fill="#f97316"/>
+    <path d="M16 44c0-5 32-5 32 0 0 7-6 12-16 12s-16-5-16-12z" fill="url(#mp-bell)"/>
+    <path d="M23 42c4 3 14 3 18 0" fill="none" stroke="#fed7aa" stroke-width="3" stroke-linecap="round"/>
+    <animateTransform attributeName="transform" type="translate"
+      values="0 0; 0 1.6; 0 0; 0 -0.8; 0 0"
+      dur="2.4s" repeatCount="indefinite"/>
+  </g>
+
+  <path d="M18 21h8m12 0h8M22 16l4 5-4 5m20-10-4 5 4 5" fill="none" stroke="#0d9488" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <circle cx="16" cy="21" fill="#22c55e">
+    <animate attributeName="r" values="2.4;3.6;2.4" dur="1.4s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.55;1;0.55" dur="1.4s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="48" cy="21" fill="#22c55e">
+    <animate attributeName="r" values="2.4;3.6;2.4" dur="1.4s" begin="0.45s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.55;1;0.55" dur="1.4s" begin="0.45s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="32" cy="29" fill="#22c55e">
+    <animate attributeName="r" values="2.4;3.6;2.4" dur="1.4s" begin="0.9s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.55;1;0.55" dur="1.4s" begin="0.9s" repeatCount="indefinite"/>
+  </circle>
+
+  <path d="M24 52h16" stroke="#f8fafc" stroke-width="2.8" stroke-linecap="round"/>
+</svg>
