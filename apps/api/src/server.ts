@@ -30,6 +30,11 @@ const app = Fastify({
         }
 });
 
+await app.register(cors, {
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+});
+
 const MAX_DOC_SIZE = 5 * 1024 * 1024;
 const MAX_ANALYZE_CHARS = 30_000;
 const MAX_ROBOTS_TXT_BYTES = 256 * 1024;
@@ -1751,9 +1756,6 @@ async function fetchSameOriginRecursive(seedUrl: string, maxPages: number): Prom
   return { pages, mergedMarkdown: mergeFetchedPages(pages) };
 }
 
-app.register(cors, {
-  origin: process.env.WEB_ORIGIN ?? true
-});
 
 app.get("/api/health", async () => ({ ok: true }));
 
@@ -2134,7 +2136,7 @@ app.post("/api/docs/analyze", async (req, reply) => {
         ]
       },
       {
-        timeout: 30_000,
+        timeout: 120_000,
         headers: {
           "content-type": "application/json",
           authorization: `Bearer ${process.env.ANALYZER_API_KEY}`

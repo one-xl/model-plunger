@@ -5,7 +5,7 @@ import { BrowserRouter, Link, NavLink, Route, Routes, useNavigate, useParams, us
 import { QueryClient, QueryClientProvider, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import "./index.css";
 
-const API_BASE = "http://localhost:8080/api";
+const API_BASE = "/api";
 const client = new QueryClient();
 
 type QuickFix = {
@@ -1358,7 +1358,7 @@ function AddDocPage() {
               </ul>
             </div>
           )}
-          <textarea className={`${input} mt-4 h-48 font-mono text-xs text-slate-800 leading-relaxed`} value={doc.markdown.slice(0, 8000)} readOnly />
+          <textarea className={`${input} mt-4 h-48 font-mono text-xs text-slate-800 leading-relaxed`} value={doc.markdown} onChange={(e) => setDoc({ ...doc, markdown: e.target.value, textLength: e.target.value.length })} placeholder="如果抓取到的内容太少（例如遇到了纯 JS 渲染的页面），您可以直接在这里粘贴文档原文后再点击分析..." />
           <button type="button" className={`${button} mt-5 w-full md:w-auto bg-gradient-to-r from-orange-500 to-pink-500 border-none shadow-[0_4px_15px_rgba(249,115,22,0.4)] text-white hover:from-orange-400 hover:to-pink-400`} onClick={() => analyzeMutation.mutate()}>AI 分析文档并提取接入步骤</button>
           {analyzeMutation.isPending && <div className="mt-3 text-sm font-bold text-orange-600 animate-pulse">正在整理接入步骤...</div>}
           {analyzeMutation.error && (
@@ -1897,15 +1897,15 @@ function TestRecordsPage() {
   });
   return shell(
     <div className={card}>
-      <table className="w-full text-left text-sm">
+      <table className="w-full text-left text-sm text-slate-900 font-medium">
         <thead>
-          <tr className="border-b">
-            <th>时间</th><th>平台</th><th>Base URL</th><th>模型</th><th>状态</th><th>HTTP</th><th>耗时</th><th>用量快照</th><th>错误类型</th><th>建议</th><th></th>
+          <tr className="border-b border-slate-300 text-slate-950 font-bold">
+            <th className="py-2">时间</th><th>平台</th><th>Base URL</th><th>模型</th><th>状态</th><th>HTTP</th><th>耗时</th><th>用量快照</th><th>错误类型</th><th>建议</th><th></th>
           </tr>
         </thead>
         <tbody>
           {(data?.records ?? []).map((r) => (
-            <tr key={r.id} className="border-b">
+            <tr key={r.id} className="border-b border-slate-200 hover:bg-slate-50 transition-colors">
               <td>{new Date(r.createdAt).toLocaleString()}</td>
               <td>{r.providerName}</td>
               <td>{r.baseUrlMasked}</td>

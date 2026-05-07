@@ -7,10 +7,12 @@ apps/api/prisma/vitest.db-journal
 apps/web/dist
 apps/api/dist
 .env
-.kilo
+**/.env
+deploy.zip
+*.pyc
+__pycache__/
+apps/api/prisma/dev.db
+apps/api/prisma/dev.db-journal
+.kilo/
 *.log
 *.tsbuildinfo
-/home*.png
-/add*.png
-/connect*.png
-/mobile*.png
