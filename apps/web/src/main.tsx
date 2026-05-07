@@ -84,16 +84,15 @@ async function postKnowledgeImport(payload: Record<string, unknown>) {
   return data as { imported: number; failed: number; errors?: string[]; message?: string; mode?: string };
 }
 
-const card = "ui-card rounded-lg border border-slate-200/80 bg-white/95 p-3 shadow-sm";
-const input =
-  "w-full rounded-md border border-slate-300 bg-white px-2.5 py-1.5 text-sm outline-none transition duration-200 focus:border-teal-500 focus:ring-4 focus:ring-teal-100/90 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400";
-const linkText = "text-teal-700 hover:text-teal-900 hover:underline";
-const btnPrimary = "bg-teal-700 text-white hover:bg-teal-800 disabled:hover:bg-teal-700";
-const button = "ui-button rounded-md px-3 py-1.5 text-sm font-semibold";
-const tabInactive = `${button} tab-button bg-white text-slate-600`;
-const tabActive = `${button} tab-button tab-button-active bg-slate-900 text-white`;
-const textarea = `${input} min-h-[4rem] font-mono resize-y`;
-const labelClass = "mb-1 block text-xs font-medium text-slate-600";
+const card = "ui-card p-5 md:p-6";
+const input = "ui-input";
+const linkText = "text-teal-700 hover:text-teal-800 hover:underline transition-colors font-medium";
+const btnPrimary = "btn-primary text-white";
+const button = "ui-button";
+const tabInactive = `${button} tab-button text-slate-900`;
+const tabActive = `${button} tab-button tab-button-active`;
+const textarea = "ui-textarea";
+const labelClass = "ui-label";
 
 const navItems: Array<{ to: string; label: string; end?: boolean }> = [
   { to: "/", label: "首页", end: true },
@@ -134,7 +133,7 @@ function ConnectStepRail({ phase }: { phase: 1 | 2 | 3 }) {
             phase === s.n ? "border-teal-400/80 bg-teal-50/95 shadow-sm ring-1 ring-teal-200/90" : "border-slate-200/85 bg-white/70"
           }`}
         >
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-900 text-xs font-bold text-white">{s.n}</span>
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-900 text-xs font-bold text-slate-950">{s.n}</span>
           <span className="text-xs font-medium leading-snug text-slate-800">{s.t}</span>
         </li>
       ))}
@@ -147,31 +146,11 @@ function PlungerMark({ animated = false, intro = false }: { animated?: boolean; 
     ? "plunger-bob h-16 w-16"
     : `${intro ? "plunger-mark" : ""} h-10 w-10 shrink-0`;
   return (
-    <svg
+    <img
+      src="/favicon.svg"
+      alt="Model Plunger 站点图标"
       className={cls}
-      viewBox="0 0 96 96"
-      role="img"
-      aria-label="Model Plunger 站点图标"
-    >
-      <circle cx="48" cy="48" r="44" fill="#0f172a" />
-      <path d="M45 9h6v44h-6z" fill="#f8fafc" />
-      <rect x="38" y="7" width="20" height="10" rx="4" fill="#0d9488" />
-      <path d="M29 50c0-10 38-10 38 0v7c0 9-8 16-19 16s-19-7-19-16z" fill="#f97316" />
-      <path d="M23 67c0-8 50-8 50 0 0 11-10 19-25 19s-25-8-25-19z" fill="#ef4444" />
-      <path d="M34 65c7 5 21 5 28 0" fill="none" stroke="#fed7aa" strokeWidth="4" strokeLinecap="round" />
-      <path
-        d="M22 31h15m22 0h15M31 23l6 8-6 8m34-16-6 8 6 8M48 40v9"
-        fill="none"
-        stroke="#0d9488"
-        strokeWidth="4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <circle className="plunger-pulse" cx="18" cy="31" r="5" fill="#22c55e" />
-      <circle className="plunger-pulse" cx="78" cy="31" r="5" fill="#22c55e" />
-      <circle className="plunger-pulse" cx="48" cy="49" r="5" fill="#22c55e" />
-      <path d="M36 80h24" stroke="#f8fafc" strokeWidth="4" strokeLinecap="round" />
-    </svg>
+    />
   );
 }
 
@@ -427,14 +406,14 @@ function copyText(text: string) {
 function FieldCopyRow({ label, value }: { label: string; value: React.ReactNode }) {
   const text = value == null ? "" : String(value);
   return (
-    <div className="rounded-md border border-slate-200 bg-slate-50/70 p-2">
-      <div className="mb-1 flex items-center justify-between gap-2">
-        <div className="text-xs font-semibold text-slate-500">{label}</div>
-        <button type="button" className={`${button} min-h-0 bg-white px-2 py-1 text-xs text-slate-700`} onClick={() => copyText(text)}>
+    <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 shadow-sm">
+      <div className="mb-2 flex items-center justify-between gap-3">
+        <div className="text-xs font-bold uppercase tracking-wider text-slate-800">{label}</div>
+        <button type="button" className={`${button} min-h-0 border-slate-200 bg-white px-2.5 py-1 text-[11px] font-bold text-slate-950 hover:bg-slate-50`} onClick={() => copyText(text)}>
           复制
         </button>
       </div>
-      <div className="break-all font-mono text-xs text-slate-900">{text || "未明确"}</div>
+      <div className="break-all font-mono text-sm text-slate-950 ">{text || "未明确"}</div>
     </div>
   );
 }
@@ -444,15 +423,17 @@ function CopyableConfigCard({ guide }: { guide: ClientConfigGuide }) {
   const fullJson = JSON.stringify({ provider: cfg.provider, baseUrl: cfg.baseUrl, apiKey: cfg.apiKey, model: cfg.model }, null, 2);
   const envText = `PROVIDER=${cfg.provider ?? ""}\nBASE_URL=${cfg.baseUrl ?? ""}\nAPI_KEY=${cfg.apiKey ?? "YOUR_API_KEY"}\nMODEL=${cfg.model ?? ""}`;
   return (
-    <div className={card}>
-      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-        <div className="text-sm font-semibold">一键复制配置</div>
+    <div className={`${card} border-blue-500/20`}>
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <div className="text-base font-bold text-slate-950 flex items-center gap-2">
+          <span className="text-blue-600">📋</span> 一键复制配置
+        </div>
         <div className="flex flex-wrap gap-2">
-          <button type="button" className={`${button} bg-slate-100 text-slate-800`} onClick={() => copyText(fullJson)}>复制 JSON</button>
-          <button type="button" className={`${button} bg-slate-100 text-slate-800`} onClick={() => copyText(envText)}>复制 .env</button>
+          <button type="button" className={`${button} border-slate-200 bg-white text-xs text-slate-950 hover:bg-slate-50`} onClick={() => copyText(fullJson)}>复制 JSON</button>
+          <button type="button" className={`${button} border-slate-200 bg-white text-xs text-slate-950 hover:bg-slate-50`} onClick={() => copyText(envText)}>复制 .env</button>
         </div>
       </div>
-      <div className="grid gap-2 md:grid-cols-2">
+      <div className="grid gap-3 md:grid-cols-2">
         <FieldCopyRow label="Provider" value={cfg.provider} />
         <FieldCopyRow label="Base URL" value={cfg.baseUrl} />
         <FieldCopyRow label="API Key" value={cfg.apiKey ?? "YOUR_API_KEY"} />
@@ -465,9 +446,11 @@ function CopyableConfigCard({ guide }: { guide: ClientConfigGuide }) {
 function BeginnerGuideCard({ guide }: { guide: ClientConfigGuide }) {
   const yn = (v: boolean | null) => (v === null ? "未明确" : v ? "要" : "不要");
   return (
-    <div className={card}>
-      <div className="mb-2 text-sm font-semibold">小白填写指南</div>
-      <div className="grid gap-2 md:grid-cols-2">
+    <div className={`${card} border-teal-500/20`}>
+      <div className="mb-4 text-base font-bold text-slate-950 flex items-center gap-2">
+        <span className="text-teal-700">💡</span> 小白填写指南
+      </div>
+      <div className="grid gap-3 md:grid-cols-2">
         <FieldCopyRow label="推荐 Provider 类型" value={guide.providerTypeToChoose} />
         <FieldCopyRow label="Base URL 应该填什么" value={guide.baseUrlToFill} />
         <FieldCopyRow label="API Key 应该填哪里" value={guide.apiKeyFieldInstruction} />
@@ -477,9 +460,9 @@ function BeginnerGuideCard({ guide }: { guide: ClientConfigGuide }) {
         <FieldCopyRow label="/chat/completions 要不要手动填" value={yn(guide.shouldUserIncludeChatCompletions)} />
         <FieldCopyRow label="是否填写完整 endpoint" value={yn(guide.shouldUserIncludeFullEndpoint)} />
       </div>
-      <div className="mt-3 rounded-md bg-teal-50 px-3 py-2 text-sm leading-relaxed text-teal-950">{guide.beginnerSummary}</div>
+      <div className="mt-4 rounded-xl border border-teal-200 bg-teal-50 px-4 py-3 text-sm font-medium leading-relaxed text-teal-900 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">{guide.beginnerSummary}</div>
       {guide.commonMistakes.length > 0 ? (
-        <ul className="mt-3 list-inside list-disc text-sm leading-relaxed text-slate-700">
+        <ul className="mt-4 list-inside list-disc space-y-1 text-sm font-medium leading-relaxed text-slate-900">
           {guide.commonMistakes.map((m, i) => <li key={`${i}-${m.slice(0, 24)}`}>{m}</li>)}
         </ul>
       ) : null}
@@ -491,20 +474,22 @@ function SoftwareGuidesCard({ guide }: { guide: ClientConfigGuide }) {
   const [tab, setTab] = React.useState<keyof ClientConfigGuide["clientSpecificGuides"]>("cursor");
   const row = guide.clientSpecificGuides[tab];
   return (
-    <div className={card}>
-      <div className="mb-2 text-sm font-semibold">软件填写指南</div>
-      <div className="mb-3 flex flex-wrap gap-2">
+    <div className={`${card} border-purple-500/20`}>
+      <div className="mb-4 text-base font-bold text-slate-950 flex items-center gap-2">
+        <span className="text-purple-600">🚀</span> 软件填写指南
+      </div>
+      <div className="mb-4 flex flex-wrap gap-2">
         {clientGuideNames.map(([key, label]) => (
           <button key={key} type="button" className={tab === key ? tabActive : tabInactive} onClick={() => setTab(key)}>{label}</button>
         ))}
       </div>
-      <div className="grid gap-2 md:grid-cols-2">
+      <div className="grid gap-3 md:grid-cols-2">
         <FieldCopyRow label="Provider 选什么" value={row.provider} />
         <FieldCopyRow label="Base URL 填什么" value={row.baseUrl} />
         <FieldCopyRow label="API Key 填什么" value={row.apiKey ?? "YOUR_API_KEY"} />
         <FieldCopyRow label="Model Name 填什么" value={row.model} />
       </div>
-      <ul className="mt-3 list-inside list-disc text-sm text-slate-700">
+      <ul className="mt-4 list-inside list-disc space-y-1 text-sm font-medium text-slate-900">
         {(row.notes.length ? row.notes : ["没有特别规则时，按通用 OpenAI Compatible 配置填写。"]).map((n, i) => <li key={i}>{n}</li>)}
       </ul>
     </div>
@@ -601,7 +586,7 @@ function AnalysisFieldEditor({ draft, onChange }: { draft: AnalysisDraft; onChan
   return (
     <div className="space-y-4">
       <div className="rounded-lg border border-slate-200 p-3">
-        <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Provider（平台信息）</div>
+        <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-700">Provider（平台信息）</div>
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           <div>
             <label className={labelClass}>平台名称</label>
@@ -623,7 +608,7 @@ function AnalysisFieldEditor({ draft, onChange }: { draft: AnalysisDraft; onChan
       </div>
 
       <div className="rounded-lg border border-slate-200 p-3">
-        <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">兼容性（能不能按 OpenAI 的方式接）</div>
+        <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-700">兼容性（能不能按 OpenAI 的方式接）</div>
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           <div>
             <label className={labelClass}>OpenAI Compatible（是否支持 OpenAI 常见接法）</label>
@@ -662,7 +647,7 @@ function AnalysisFieldEditor({ draft, onChange }: { draft: AnalysisDraft; onChan
       </div>
 
       <div className="rounded-lg border border-slate-200 p-3">
-        <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">鉴权（密钥怎么填）</div>
+        <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-700">鉴权（密钥怎么填）</div>
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           <div>
             <label className={labelClass}>鉴权类型（密钥填写方式）</label>
@@ -706,7 +691,7 @@ function AnalysisFieldEditor({ draft, onChange }: { draft: AnalysisDraft; onChan
       </div>
 
       <div className="rounded-lg border border-slate-200 p-3">
-        <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Endpoint（接口地址）</div>
+        <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-700">Endpoint（接口地址）</div>
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           {(["baseUrl", "chatCompletions", "embeddings", "models"] as const).map((key) => (
             <div key={key} className={key === "baseUrl" ? "md:col-span-2" : ""}>
@@ -723,7 +708,7 @@ function AnalysisFieldEditor({ draft, onChange }: { draft: AnalysisDraft; onChan
 
       <div className="rounded-lg border border-slate-200 p-3">
         <div className="mb-2 flex items-center justify-between">
-          <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">模型列表</span>
+          <span className="text-xs font-semibold uppercase tracking-wide text-slate-700">模型列表</span>
           <button
             type="button"
             className={`${button} bg-slate-100 text-slate-800`}
@@ -747,7 +732,7 @@ function AnalysisFieldEditor({ draft, onChange }: { draft: AnalysisDraft; onChan
           </button>
         </div>
         <div className="space-y-3">
-          {draft.models.length === 0 && <p className="text-sm text-slate-500">暂无模型，可点击「添加一行」。</p>}
+          {draft.models.length === 0 && <p className="text-sm text-slate-700">暂无模型，可点击「添加一行」。</p>}
           {draft.models.map((row, idx) => (
             <div key={idx} className="grid grid-cols-1 gap-2 rounded-md border border-slate-100 bg-slate-50 p-2 md:grid-cols-12">
               <div className="md:col-span-4">
@@ -779,7 +764,7 @@ function AnalysisFieldEditor({ draft, onChange }: { draft: AnalysisDraft; onChan
       </div>
 
       <div className="rounded-lg border border-slate-200 p-3">
-        <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">代码示例</div>
+        <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-700">代码示例</div>
         {(["curl", "python", "javascript"] as const).map((lang) => (
           <div key={lang} className="mb-3">
             <label className={labelClass}>{lang}</label>
@@ -795,7 +780,7 @@ function AnalysisFieldEditor({ draft, onChange }: { draft: AnalysisDraft; onChan
 
       <div className="rounded-lg border border-slate-200 p-3">
         <div className="mb-2 flex items-center justify-between">
-          <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">常见错误</span>
+          <span className="text-xs font-semibold uppercase tracking-wide text-slate-700">常见错误</span>
           <button type="button" className={`${button} bg-slate-100`} onClick={() => patch((d) => { d.commonErrors.push({ error: "", reason: null, solution: null }); })}>添加</button>
         </div>
         {draft.commonErrors.map((err, idx) => (
@@ -813,7 +798,7 @@ function AnalysisFieldEditor({ draft, onChange }: { draft: AnalysisDraft; onChan
       </div>
 
       <div className="rounded-lg border border-slate-200 p-3">
-        <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">限制与元信息</div>
+        <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-700">限制与元信息</div>
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           <div>
             <label className={labelClass}>速率限制说明</label>
@@ -873,7 +858,7 @@ function AnalysisFieldEditor({ draft, onChange }: { draft: AnalysisDraft; onChan
       </div>
 
       <details className="rounded-lg border border-slate-200 p-3">
-        <summary className="cursor-pointer text-xs font-semibold uppercase tracking-wide text-slate-500">
+        <summary className="cursor-pointer text-xs font-semibold uppercase tracking-wide text-slate-700">
           minimalRequests（JSON，可折叠）
         </summary>
         <p className="mt-2 text-xs text-slate-600">
@@ -902,50 +887,81 @@ function AnalysisFieldEditor({ draft, onChange }: { draft: AnalysisDraft; onChan
 
 function shell(children: React.ReactNode) {
   return (
-    <div className="app-shell min-h-screen">
-      <div className="mx-auto grid min-h-screen max-w-[1500px] gap-3 px-3 py-3 lg:grid-cols-[15rem_minmax(0,1fr)] lg:px-4">
-      <header className="app-sidebar relative overflow-hidden rounded-xl border border-slate-200 bg-white/95 p-3 shadow-sm lg:sticky lg:top-3 lg:h-[calc(100vh-1.5rem)]">
-        <div className="plunger-run pointer-events-none absolute top-3 opacity-20" aria-hidden="true">
-          <PlungerMark animated />
-        </div>
-        <div className="relative flex items-center gap-2.5">
-          <PlungerMark intro />
-          <div>
-            <div className="font-display text-lg font-bold leading-tight tracking-tight text-slate-950">模型马桶塞</div>
-            <div className="text-xs font-semibold text-teal-700">Model Plunger</div>
-            <div className="mt-1 text-xs leading-snug text-slate-600">
-              专治 API 不通、URL 填错、模型名找不到。
+    <div className="app-shell pb-20 lg:pb-0">
+      <div className="mx-auto grid min-h-screen max-w-[1500px] gap-6 px-4 py-6 lg:grid-cols-[16rem_minmax(0,1fr)] lg:px-6">
+        
+        {/* Desktop Sidebar */}
+        <header className="hidden lg:flex flex-col relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-xl backdrop-blur-xl lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)] z-10">
+          <div className="plunger-run pointer-events-none absolute top-3 opacity-20" aria-hidden="true">
+            <PlungerMark animated />
+          </div>
+          <div className="relative flex items-center gap-4">
+            <div className="bg-teal-500/20 p-2 rounded-2xl shadow-[0_0_15px_rgba(20,184,166,0.5)]">
+              <PlungerMark intro />
+            </div>
+            <div>
+              <div className="font-display text-xl font-black leading-tight tracking-tight text-slate-950 ">模型马桶塞</div>
+              <div className="text-xs font-bold text-teal-700 uppercase tracking-widest mt-1">Model Plunger</div>
             </div>
           </div>
-        </div>
-        <nav className="relative mt-4 grid grid-cols-2 gap-1.5 text-sm lg:grid-cols-1" aria-label="Primary">
-          {navItems.map((item) => (
-            <NavLink
-              key={item.to}
-              className={({ isActive }) => `nav-pill ${isActive ? "nav-pill-active" : ""}`}
-              end={item.end}
-              to={item.to}
-            >
-              {item.label}
-            </NavLink>
-          ))}
-        </nav>
-        <div className="relative mt-4 hidden rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600 lg:block">
-          <div className="font-mono text-[10px] font-semibold uppercase tracking-wider text-slate-500">理想路径</div>
-          <ol className="mp-ideal-path mt-2 space-y-1.5 rounded-md py-2 pl-4 pr-2 text-[11px] leading-snug text-slate-700">
-            <li>① 粘贴陌生平台的在线文档</li>
-            <li>② 生成小白填写指南</li>
-            <li>③ 复制 Provider / Base URL / 模型名</li>
-            <li>④ 按软件查看 Cursor、Trae、Cline 等填法</li>
-            <li>⑤ 一键测试接口是否接通</li>
-            <li>⑥ 根据 404 / 401 / 模型名错误提示修正</li>
-          </ol>
-        </div>
-      </header>
-      <main className="min-w-0">
-        <div className="page-transition">{children}</div>
-      </main>
+          
+          <nav className="relative mt-8 flex flex-col gap-2" aria-label="Primary">
+            {navItems.map((item) => (
+              <NavLink
+                key={item.to}
+                className={({ isActive }) => `nav-pill ${isActive ? "nav-pill-active" : ""}`}
+                end={item.end}
+                to={item.to}
+              >
+                <span className="w-full text-left font-bold">{item.label}</span>
+              </NavLink>
+            ))}
+          </nav>
+          
+          <div className="relative mt-auto rounded-2xl border border-slate-200 bg-slate-50 p-4 text-xs text-slate-900">
+            <div className="font-mono text-[10px] font-bold uppercase tracking-wider text-teal-500">理想路径</div>
+            <ol className="mt-3 space-y-2 text-[11px] font-medium leading-snug">
+              <li>① 粘贴陌生平台的在线文档</li>
+              <li>② 生成小白填写指南</li>
+              <li>③ 复制 Provider / Base URL</li>
+              <li>④ 按软件查看 Cursor 等填法</li>
+              <li>⑤ 一键测试接口是否接通</li>
+              <li>⑥ 根据错误提示一键修正</li>
+            </ol>
+          </div>
+        </header>
+
+        {/* Mobile Header */}
+        <header className="lg:hidden flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="bg-teal-500/20 p-1.5 rounded-xl shadow-[0_0_15px_rgba(20,184,166,0.3)]">
+              <PlungerMark intro />
+            </div>
+            <div>
+              <div className="font-display text-lg font-black leading-tight tracking-tight text-slate-950">模型马桶塞</div>
+              <div className="text-[10px] font-bold text-teal-700 uppercase tracking-widest">Model Plunger</div>
+            </div>
+          </div>
+        </header>
+
+        <main className="min-w-0 z-0">
+          <div className="page-transition">{children}</div>
+        </main>
       </div>
+
+      {/* Mobile Bottom Navigation */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around border-t border-slate-200 bg-white/80 p-2 pb-4 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60">
+        {navItems.slice(0, 5).map((item) => (
+          <NavLink
+            key={item.to}
+            className={({ isActive }) => `nav-pill flex-1 text-center ${isActive ? "nav-pill-active" : ""}`}
+            end={item.end}
+            to={item.to}
+          >
+            <span className="text-[10px] font-bold mt-1 line-clamp-1">{item.label}</span>
+          </NavLink>
+        ))}
+      </nav>
     </div>
   );
 }
@@ -958,97 +974,102 @@ function Dashboard() {
   const stats = data?.stats;
   return shell(
     <>
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.35fr)_minmax(22rem,0.65fr)]">
-        <div className={`${card} mp-callout-wizard border p-4`}>
-          <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-teal-700">Model Plunger</div>
-          <h1 className="mt-2 font-display text-2xl font-extrabold tracking-tight text-slate-950 md:text-3xl">
-            模型马桶塞
-          </h1>
-          <p className="mt-2 max-w-4xl text-sm leading-relaxed text-slate-700">
-            把复杂的大模型 API 文档，翻译成 Cursor、Trae、Cline、Continue 等 AI 编程软件里能直接复制填写的 Provider、Base URL、API Key 和模型名。
-          </p>
-          <div className="mt-3 rounded-md border border-teal-200 bg-white/70 px-3 py-2 text-sm font-semibold text-slate-900">
-            哪里不通，捅哪里。专治 API 不通、URL 填错、模型名找不到。
-          </div>
-          <div className="mt-4 grid gap-2 md:grid-cols-3">
-            <Link className={`${button} ${btnPrimary}`} to="/add-doc">解析文档网址</Link>
-            <Link className={`${button} bg-white text-slate-800`} to="/connect">先测一个接口</Link>
-            <Link className={`${button} bg-white text-slate-800`} to="/providers">查看接入知识库</Link>
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1.35fr)_minmax(22rem,0.65fr)]">
+        <div className={`${card} relative overflow-hidden bg-gradient-to-br from-teal-500/10 to-transparent border-teal-200`}>
+          <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-teal-500/20 blur-3xl rounded-full"></div>
+          <div className="relative z-10">
+            <div className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-teal-700">Model Plunger</div>
+            <h1 className="mt-3 font-display text-3xl font-black tracking-tight text-slate-950 md:text-5xl ">
+              模型马桶塞
+            </h1>
+            <p className="mt-4 max-w-4xl text-base leading-relaxed text-slate-900 font-medium">
+              把复杂的大模型 API 文档，翻译成 Cursor、Trae、Cline、Continue 等 AI 编程软件里能直接复制填写的 Provider、Base URL、API Key 和模型名。
+            </p>
+            <div className="mt-5 rounded-2xl border border-teal-200 bg-teal-50 px-5 py-3 text-sm font-bold text-teal-900 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
+              哪里不通，捅哪里。专治 API 不通、URL 填错、模型名找不到。
+            </div>
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              <Link className={`${button} ${btnPrimary}`} to="/add-doc">解析文档网址</Link>
+              <Link className={`${button}`} to="/connect">先测一个接口</Link>
+              <Link className={`${button}`} to="/providers">查看接入知识库</Link>
+            </div>
           </div>
         </div>
 
-        <div className={`${card} p-4`}>
-          <div className="text-sm font-semibold text-slate-900">最常见的堵点</div>
-          <ul className="mt-3 space-y-2 text-sm leading-relaxed text-slate-700">
-            <li className="rounded-md bg-slate-50 px-3 py-2">Base URL 填成了完整 `/chat/completions`。</li>
-            <li className="rounded-md bg-slate-50 px-3 py-2">漏写或重复写了 `/v1`。</li>
-            <li className="rounded-md bg-slate-50 px-3 py-2">API Key 复制多了空格，或没有模型权限。</li>
-            <li className="rounded-md bg-slate-50 px-3 py-2">模型名自己简写，导致 model not found。</li>
+        <div className={`${card}`}>
+          <div className="text-base font-bold text-slate-950 flex items-center gap-2">
+            <span className="text-orange-600">⚠️</span> 最常见的堵点
+          </div>
+          <ul className="mt-4 space-y-3 text-sm leading-relaxed text-slate-900">
+            <li className="rounded-xl bg-slate-50 border border-slate-200 px-4 py-3 shadow-sm">Base URL 填成了完整 <code className="text-pink-600 bg-slate-50 px-1.5 py-0.5 rounded-md">/chat/completions</code>。</li>
+            <li className="rounded-xl bg-slate-50 border border-slate-200 px-4 py-3 shadow-sm">漏写或重复写了 <code className="text-pink-600 bg-slate-50 px-1.5 py-0.5 rounded-md">/v1</code>。</li>
+            <li className="rounded-xl bg-slate-50 border border-slate-200 px-4 py-3 shadow-sm">API Key 复制多了空格，或没有模型权限。</li>
+            <li className="rounded-xl bg-slate-50 border border-slate-200 px-4 py-3 shadow-sm">模型名自己简写，导致 <code className="text-pink-600 bg-slate-50 px-1.5 py-0.5 rounded-md">model not found</code>。</li>
           </ul>
         </div>
       </div>
 
-      <div className="mt-4 grid gap-4 lg:grid-cols-3">
+      <div className="mt-6 grid gap-6 lg:grid-cols-3">
         <div className={card}>
-          <div className="text-sm font-semibold text-slate-900">示例：小米 MiMo 这类文档</div>
-          <div className="mt-2 rounded-md bg-slate-50 p-3 font-mono text-xs leading-relaxed text-slate-800">
-            Base URL: https://xxx/v1<br />
-            Endpoint: /chat/completions
+          <div className="text-sm font-bold text-slate-950 uppercase tracking-wider">示例：小米 MiMo 这类文档</div>
+          <div className="mt-3 rounded-xl bg-slate-50 border border-slate-200 p-4 font-mono text-xs leading-relaxed text-slate-900 shadow-sm">
+            <span className="text-teal-700">Base URL:</span> https://xxx/v1<br />
+            <span className="text-teal-700">Endpoint:</span> /chat/completions
           </div>
-          <p className="mt-2 text-sm leading-relaxed text-slate-700">
-            大多数软件只填 Base URL 到 `/v1`，不要把 `/chat/completions` 也塞进去。
+          <p className="mt-3 text-sm leading-relaxed text-slate-800 font-medium">
+            大多数软件只填 Base URL 到 <code className="text-slate-950">/v1</code>，不要把 <code className="text-slate-950">/chat/completions</code> 也塞进去。
           </p>
         </div>
         <div className={card}>
-          <div className="text-sm font-semibold text-slate-900">输出什么</div>
-          <dl className="mt-2 grid gap-2 text-sm">
-            <div className="flex justify-between gap-3 rounded-md bg-slate-50 px-3 py-2"><dt>Provider</dt><dd className="font-mono text-xs">OpenAI Compatible</dd></div>
-            <div className="flex justify-between gap-3 rounded-md bg-slate-50 px-3 py-2"><dt>Base URL</dt><dd className="font-mono text-xs">https://xxx/v1</dd></div>
-            <div className="flex justify-between gap-3 rounded-md bg-slate-50 px-3 py-2"><dt>Model</dt><dd className="font-mono text-xs">按文档复制</dd></div>
+          <div className="text-sm font-bold text-slate-950 uppercase tracking-wider">输出什么</div>
+          <dl className="mt-3 grid gap-3 text-sm">
+            <div className="flex justify-between items-center gap-3 rounded-xl bg-slate-50 border border-slate-200 px-4 py-3 shadow-sm"><dt className="font-semibold text-slate-800">Provider</dt><dd className="font-mono text-xs text-slate-950">OpenAI Compatible</dd></div>
+            <div className="flex justify-between items-center gap-3 rounded-xl bg-slate-50 border border-slate-200 px-4 py-3 shadow-sm"><dt className="font-semibold text-slate-800">Base URL</dt><dd className="font-mono text-xs text-slate-950">https://xxx/v1</dd></div>
+            <div className="flex justify-between items-center gap-3 rounded-xl bg-slate-50 border border-slate-200 px-4 py-3 shadow-sm"><dt className="font-semibold text-slate-800">Model</dt><dd className="font-mono text-xs text-slate-950">按文档复制</dd></div>
           </dl>
         </div>
         <div className={card}>
-          <div className="text-sm font-semibold text-slate-900">失败后怎么办</div>
-          <p className="mt-2 text-sm leading-relaxed text-slate-700">
-            测试失败时会按 400、401、402、404、422 等状态分析原因，并给出“一键纠错”按钮，先改输入框，再由你决定是否重测。
+          <div className="text-sm font-bold text-slate-950 uppercase tracking-wider">失败后怎么办</div>
+          <p className="mt-3 text-sm leading-relaxed text-slate-800 font-medium">
+            测试失败时会按 400、401、402、404、422 等状态分析原因，并给出 <strong className="text-teal-700">“一键纠错”</strong> 按钮，先改输入框，再由你决定是否重测。
           </p>
         </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-4">
-        <div className={`${card} mp-stat-card`}>
-          <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">Providers</div>
-          <div className="mp-stat-figure mt-1 text-3xl font-extrabold text-slate-900">{stats?.providerCount ?? 0}</div>
-          <div className="mt-1 text-xs text-slate-500">已收录平台</div>
+      <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-4">
+        <div className={`${card} mp-stat-card border-t-2 border-t-purple-500`}>
+          <div className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-slate-800">Providers</div>
+          <div className="mp-stat-figure mt-1 text-4xl font-black text-slate-950 ">{stats?.providerCount ?? 0}</div>
+          <div className="mt-1 text-xs text-slate-800 font-medium">已收录平台</div>
         </div>
-        <div className={`${card} mp-stat-card`}>
-          <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">Docs</div>
-          <div className="mp-stat-figure mt-1 text-3xl font-extrabold text-slate-900">{stats?.analyzedDocCount ?? 0}</div>
-          <div className="mt-1 text-xs text-slate-500">已分析文档</div>
+        <div className={`${card} mp-stat-card border-t-2 border-t-teal-500`}>
+          <div className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-slate-800">Docs</div>
+          <div className="mp-stat-figure mt-1 text-4xl font-black text-slate-950 ">{stats?.analyzedDocCount ?? 0}</div>
+          <div className="mt-1 text-xs text-slate-800 font-medium">已分析文档</div>
         </div>
-        <div className={`${card} mp-stat-card`}>
-          <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">Tests</div>
-          <div className="mp-stat-figure mt-1 text-3xl font-extrabold text-slate-900">{stats?.testCount ?? 0}</div>
-          <div className="mt-1 text-xs text-slate-500">已发起测试</div>
+        <div className={`${card} mp-stat-card border-t-2 border-t-pink-500`}>
+          <div className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-slate-800">Tests</div>
+          <div className="mp-stat-figure mt-1 text-4xl font-black text-slate-950 ">{stats?.testCount ?? 0}</div>
+          <div className="mt-1 text-xs text-slate-800 font-medium">已发起测试</div>
         </div>
-        <div className={`${card} mp-stat-card`}>
-          <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">Recent</div>
+        <div className={`${card} mp-stat-card border-t-2 border-t-orange-500`}>
+          <div className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-slate-800">Recent</div>
           {stats?.lastTestResult ? (
             <>
               <div
-                className={`mt-1 inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-xs font-semibold ${
+                className={`mt-2 inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-semibold ${
                   stats.lastTestResult.success ? "mp-status-success" : "mp-status-fail"
                 }`}
               >
-                <span className={`h-1.5 w-1.5 rounded-full ${stats.lastTestResult.success ? "bg-emerald-500" : "bg-rose-500"}`} aria-hidden="true" />
+                <span className={`h-1.5 w-1.5 rounded-full ${stats.lastTestResult.success ? "bg-emerald-400 shadow-[0_0_8px_#34d399]" : "bg-rose-400 shadow-[0_0_8px_#fb7185]"}`} aria-hidden="true" />
                 {stats.lastTestResult.success ? "成功" : "失败"}
               </div>
-              <div className="mt-1 truncate text-sm font-semibold text-slate-800" title={stats.lastTestResult.providerName}>
+              <div className="mt-2 truncate text-sm font-bold text-slate-950 " title={stats.lastTestResult.providerName}>
                 {stats.lastTestResult.providerName}
               </div>
             </>
           ) : (
-            <div className="mt-1 text-sm text-slate-500">暂无测试</div>
+            <div className="mt-2 text-sm text-slate-800 font-medium">暂无测试</div>
           )}
         </div>
       </div>
@@ -1172,44 +1193,54 @@ function AddDocPage() {
   }
 
   return shell(
-    <div className="space-y-4">
-      <div className={`${card} mp-callout-wizard border`}>
-        <div className="font-display text-lg font-bold text-slate-950">解析文档网址</div>
-        <p className="mt-2 text-sm leading-relaxed text-slate-700">
-          粘贴模型平台的官方接入文档、Quick Start、API Reference 或 OpenAI Compatible 说明页。不要贴控制台后台地址、登录后才能看的页面，抓取器读不到。
-        </p>
-        <div className="mt-3 grid gap-2 text-xs text-slate-700 md:grid-cols-3">
-          <div className="rounded-md bg-white/70 px-3 py-2">1. 抓取网页正文</div>
-          <div className="rounded-md bg-white/70 px-3 py-2">2. AI 翻译成软件填写项</div>
-          <div className="rounded-md bg-white/70 px-3 py-2">3. 保存到接入知识库</div>
+    <div className="space-y-6">
+      <div className={`${card} relative overflow-hidden bg-gradient-to-br from-purple-500/10 to-transparent border-purple-500/30`}>
+        <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-purple-500/20 blur-3xl rounded-full pointer-events-none"></div>
+        <div className="relative z-10">
+          <div className="font-display text-2xl font-black text-slate-950 ">解析文档网址</div>
+          <p className="mt-3 text-base leading-relaxed text-slate-900 font-medium">
+            粘贴模型平台的官方接入文档、Quick Start、API Reference 或 OpenAI Compatible 说明页。不要贴控制台后台地址、登录后才能看的页面，抓取器读不到。
+          </p>
+          <div className="mt-5 grid gap-3 text-xs font-bold text-slate-800 md:grid-cols-3">
+            <div className="rounded-xl bg-slate-50 border border-slate-200 px-4 py-3 shadow-sm flex items-center gap-2">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-500/20 text-teal-700">1</span> 抓取网页正文
+            </div>
+            <div className="rounded-xl bg-slate-50 border border-slate-200 px-4 py-3 shadow-sm flex items-center gap-2">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-pink-500/20 text-pink-600">2</span> AI 翻译成软件填写项
+            </div>
+            <div className="rounded-xl bg-slate-50 border border-slate-200 px-4 py-3 shadow-sm flex items-center gap-2">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-orange-500/20 text-orange-600">3</span> 保存到接入知识库
+            </div>
+          </div>
         </div>
       </div>
 
       <div className={card}>
-        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-          <div className="text-sm font-semibold">文档来源</div>
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <div className="text-base font-bold text-slate-950">文档来源</div>
           <button
             type="button"
-            className={`${button} bg-slate-100 px-2 py-1 text-xs text-slate-700`}
+            className={`${button} border-slate-200 bg-white text-xs text-slate-950 hover:bg-slate-50`}
             onClick={() => setUrl("https://platform.openai.com/docs/api-reference/chat/create")}
           >
             填入示例 URL
           </button>
         </div>
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
             <label className={labelClass}>在线文档 URL</label>
-            <input className={input} placeholder="例如官方 Quick Start / API Reference / OpenAI Compatible 页面" value={url} onChange={(e) => setUrl(e.target.value)} />
+            <input className={input} placeholder="例如官方 Quick Start / API Reference" value={url} onChange={(e) => setUrl(e.target.value)} />
           </div>
           <div>
             <label className={labelClass}>平台名称（可选）</label>
-            <input className={input} placeholder="例如 DeepSeek / OpenRouter / 小米 MiMo" value={providerName} onChange={(e) => setProviderName(e.target.value)} />
+            <input className={input} placeholder="例如 DeepSeek / OpenRouter" value={providerName} onChange={(e) => setProviderName(e.target.value)} />
           </div>
         </div>
-        <div className="mt-4 grid gap-2 text-sm md:grid-cols-2 xl:grid-cols-4">
-          <label className="flex cursor-pointer items-center gap-2">
+        <div className="mt-5 grid gap-3 text-sm text-slate-900 md:grid-cols-2 xl:grid-cols-4">
+          <label className="flex cursor-pointer items-center gap-3">
             <input
               type="checkbox"
+              className="w-4 h-4 rounded border-slate-300 bg-slate-50 text-teal-500 focus:ring-teal-500/50"
               checked={recursiveSameOrigin}
               onChange={(e) => {
                 setRecursiveSameOrigin(e.target.checked);
@@ -1220,11 +1251,12 @@ function AddDocPage() {
                 }
               }}
             />
-            <span>同站递归抓取（顺着同一个网站多抓几页）</span>
+            <span className="font-medium">同站递归抓取（顺着同一个网站多抓几页）</span>
           </label>
-          <label className="flex cursor-pointer items-center gap-2">
+          <label className="flex cursor-pointer items-center gap-3">
             <input
               type="checkbox"
+              className="w-4 h-4 rounded border-slate-300 bg-slate-50 text-teal-500 focus:ring-teal-500/50"
               checked={fromSitemap}
               onChange={(e) => {
                 setFromSitemap(e.target.checked);
@@ -1235,11 +1267,12 @@ function AddDocPage() {
                 }
               }}
             />
-            <span>按 Sitemap 抓取（按网站目录抓取）</span>
+            <span className="font-medium">按 Sitemap 抓取（按网站目录抓取）</span>
           </label>
-          <label className="flex cursor-pointer items-center gap-2">
+          <label className="flex cursor-pointer items-center gap-3">
             <input
               type="checkbox"
+              className="w-4 h-4 rounded border-slate-300 bg-slate-50 text-teal-500 focus:ring-teal-500/50"
               checked={fromGithubReadme}
               onChange={(e) => {
                 setFromGithubReadme(e.target.checked);
@@ -1250,11 +1283,12 @@ function AddDocPage() {
                 }
               }}
             />
-            <span>GitHub README（抓 GitHub 项目的说明页）</span>
+            <span className="font-medium">GitHub README（抓说明页）</span>
           </label>
-          <label className="flex cursor-pointer items-center gap-2">
+          <label className="flex cursor-pointer items-center gap-3">
             <input
               type="checkbox"
+              className="w-4 h-4 rounded border-slate-300 bg-slate-50 text-teal-500 focus:ring-teal-500/50"
               checked={fromOpenApi}
               onChange={(e) => {
                 setFromOpenApi(e.target.checked);
@@ -1265,70 +1299,70 @@ function AddDocPage() {
                 }
               }}
             />
-            <span>OpenAPI / Swagger JSON（抓接口说明文件）</span>
+            <span className="font-medium">OpenAPI / Swagger JSON</span>
           </label>
         </div>
-        <div className="mt-3 flex flex-wrap items-center gap-3 text-sm">
-          <label className="flex items-center gap-2">
-            <span className="text-slate-600">最多页数（最多抓几页）</span>
+        <div className="mt-4 flex flex-wrap items-center gap-3 text-sm">
+          <label className="flex items-center gap-3">
+            <span className="text-slate-800 font-bold uppercase tracking-wider text-xs">最多页数（最多抓几页）</span>
             <input
               type="number"
               min={1}
               max={30}
-              className={`${input} w-20`}
+              className={`${input} w-24`}
               value={maxPages}
               onChange={(e) => setMaxPages(Number(e.target.value) || 1)}
               disabled={!recursiveSameOrigin && !fromSitemap}
             />
           </label>
         </div>
-        <button type="button" className={`${button} mt-4 ${btnPrimary}`} onClick={() => fetchMutation.mutate()}>抓取文档</button>
-        {fetchMutation.isPending && <div className="mt-2 text-sm text-teal-700">正在读取教程...</div>}
+        <button type="button" className={`${button} mt-6 w-full md:w-auto ${btnPrimary}`} onClick={() => fetchMutation.mutate()}>抓取文档</button>
+        {fetchMutation.isPending && <div className="mt-3 text-sm font-bold text-teal-700 animate-pulse">正在读取教程...</div>}
         {fetchMutation.error && (
-          <div className="mt-2 text-sm text-red-600">
+          <div className="mt-3 rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-sm text-rose-300">
             <ApiErrorText err={fetchMutation.error as Error} />
           </div>
         )}
       </div>
 
       {doc && (
-        <div className={card}>
-          <div className="text-sm font-semibold">抓取结果</div>
-          <div className="mt-2 text-sm">标题：{doc.title}</div>
-          <div className="text-sm">文档 URL：{doc.url}</div>
-          <div className="text-sm">读到的内容长度：{doc.textLength}</div>
+        <div className={`${card} border-teal-500/20`}>
+          <div className="text-base font-bold text-slate-950">抓取结果</div>
+          <div className="mt-3 text-sm font-medium text-slate-900">标题：<span className="text-slate-950">{doc.title}</span></div>
+          <div className="text-sm font-medium text-slate-900">文档 URL：<span className="text-slate-950">{doc.url}</span></div>
+          <div className="text-sm font-medium text-slate-900">读到的内容长度：<span className="text-slate-950">{doc.textLength}</span></div>
           {doc.openApi ? (
-            <div className="mt-2 rounded-md bg-slate-50 px-3 py-2 text-xs text-slate-700">
-              OpenAPI / Swagger：<span className="font-mono">{doc.openApi.variant}</span> → Markdown 摘要
+            <div className="mt-3 rounded-xl bg-slate-50 border border-slate-200 px-4 py-3 text-sm font-medium text-slate-900 shadow-sm">
+              OpenAPI / Swagger：<span className="font-mono text-teal-700">{doc.openApi.variant}</span> → Markdown 摘要
             </div>
           ) : null}
           {doc.github ? (
-            <div className="mt-2 rounded-md bg-slate-50 px-3 py-2 text-xs text-slate-700">
-              GitHub 说明页：<span className="font-mono">{doc.github.owner}/{doc.github.repo}</span>
+            <div className="mt-3 rounded-xl bg-slate-50 border border-slate-200 px-4 py-3 text-sm font-medium text-slate-900 shadow-sm">
+              GitHub 说明页：<span className="font-mono text-teal-700">{doc.github.owner}/{doc.github.repo}</span>
             </div>
           ) : null}
           {doc.crawl && (
-            <div className="mt-2 rounded-md bg-slate-50 px-3 py-2 text-xs text-slate-700">
-              <div className="font-semibold">
+            <div className="mt-3 rounded-xl bg-slate-50 border border-slate-200 px-4 py-3 text-sm font-medium text-slate-900 shadow-sm">
+              <div className="font-bold text-slate-950">
                 {doc.crawl.fromSitemap ? "Sitemap 抓取" : "递归抓取"}：已合并 {doc.crawl.fetchedPages} / 上限 {doc.crawl.maxPagesRequested} 页
               </div>
               {doc.crawl.fromSitemap && Array.isArray(doc.crawl.sitemapsFetched) ? (
-                <div className="mt-1 text-slate-600">已解析 sitemap 文件：{doc.crawl.sitemapsFetched.length} 个</div>
+                <div className="mt-2 text-teal-700">已解析 sitemap 文件：{doc.crawl.sitemapsFetched.length} 个</div>
               ) : null}
-              <ul className="mt-1 max-h-32 list-inside list-disc overflow-y-auto">
+              <ul className="mt-2 max-h-40 list-inside list-disc overflow-y-auto space-y-1">
                 {doc.crawl.pages.map((p: { url: string; title: string; textLength: number }) => (
                   <li key={p.url}>
-                    {p.title} — {p.textLength} 字符 — <span className="break-all font-mono">{p.url}</span>
+                    {p.title} — {p.textLength} 字符 — <span className="break-all font-mono text-xs text-slate-800">{p.url}</span>
                   </li>
                 ))}
               </ul>
             </div>
           )}
-          <textarea className={`${input} mt-2 h-40 font-mono`} value={doc.markdown.slice(0, 8000)} readOnly />
-          <button type="button" className={`${button} mt-3 bg-amber-500 text-white`} onClick={() => analyzeMutation.mutate()}>AI 分析文档并提取接入步骤</button>
-          {analyzeMutation.isPending && <div className="mt-2 text-sm text-teal-700">正在整理接入步骤...</div>}
+          <textarea className={`${input} mt-4 h-48 font-mono text-xs text-slate-800 leading-relaxed`} value={doc.markdown.slice(0, 8000)} readOnly />
+          <button type="button" className={`${button} mt-5 w-full md:w-auto bg-gradient-to-r from-orange-500 to-pink-500 border-none shadow-[0_4px_15px_rgba(249,115,22,0.4)] text-white hover:from-orange-400 hover:to-pink-400`} onClick={() => analyzeMutation.mutate()}>AI 分析文档并提取接入步骤</button>
+          {analyzeMutation.isPending && <div className="mt-3 text-sm font-bold text-orange-600 animate-pulse">正在整理接入步骤...</div>}
           {analyzeMutation.error && (
-            <div className="mt-2 text-sm text-red-600">
+            <div className="mt-3 rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-sm text-rose-300">
               <ApiErrorText err={analyzeMutation.error as Error} />
             </div>
           )}
@@ -1336,32 +1370,32 @@ function AddDocPage() {
       )}
 
       {draftAnalysis && (
-        <>
+        <div className="space-y-6">
           <BeginnerGuideCard guide={draftAnalysis.clientConfigGuide} />
           <CopyableConfigCard guide={draftAnalysis.clientConfigGuide} />
           <SoftwareGuidesCard guide={draftAnalysis.clientConfigGuide} />
-          <div className={card}>
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div className="text-sm font-semibold">分析结果（可校对后保存）</div>
+          <div className={`${card} border-pink-500/20`}>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="text-base font-bold text-slate-950">分析结果（可校对后保存）</div>
               <div className="flex flex-wrap gap-2">
                 <button type="button" className={editorTab === "form" ? tabActive : tabInactive} onClick={() => switchTab("form")}>按项修改</button>
                 <button type="button" className={editorTab === "json" ? tabActive : tabInactive} onClick={() => switchTab("json")}>JSON 源码</button>
               </div>
             </div>
 
-            <p className="mt-2 text-xs text-slate-600">上面的“小白填写指南”会优先展示给用户；这里保留原始字段编辑能力，避免破坏已有保存闭环。</p>
-            {jsonApplyError && <div className="mt-2 rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-900">{jsonApplyError}</div>}
+            <p className="mt-3 text-sm text-slate-800 font-medium">上面的“小白填写指南”会优先展示给用户；这里保留原始字段编辑能力，避免破坏已有保存闭环。</p>
+            {jsonApplyError && <div className="mt-3 rounded-xl border border-orange-500/30 bg-orange-500/10 px-4 py-3 text-sm font-bold text-orange-300">{jsonApplyError}</div>}
 
             {editorTab === "form" && (
-              <div className="tab-panel mt-4">
+              <div className="tab-panel mt-5">
                 <AnalysisFieldEditor draft={draftAnalysis} onChange={setDraftAnalysis} />
               </div>
             )}
 
             {editorTab === "json" && (
-              <div className="tab-panel mt-4 space-y-2">
-                <div className="flex flex-wrap gap-2">
-                  <button type="button" className={`${button} bg-slate-100`} onClick={prettifyJson}>校验并格式化</button>
+              <div className="tab-panel mt-5 space-y-3">
+                <div className="flex flex-wrap gap-3">
+                  <button type="button" className={`${button} border-slate-200 bg-white hover:bg-slate-50`} onClick={prettifyJson}>校验并格式化</button>
                 </div>
                 <textarea className={`${input} mt-2 h-96 font-mono`} value={jsonText} spellCheck={false} onChange={(e) => { setJsonText(e.target.value); setJsonApplyError(null); }} />
               </div>
@@ -1372,7 +1406,7 @@ function AddDocPage() {
               <div className="mt-2 text-sm text-red-600">{(saveMutation.error as Error).message}</div>
             )}
           </div>
-        </>
+        </div>
       )}
     </div>
   );
@@ -1442,7 +1476,7 @@ function ComparePage() {
       </div>
       <div className={`${card} overflow-x-auto p-0`}>
         {isLoading ? (
-          <div className="p-4 text-sm text-slate-500">加载中…</div>
+          <div className="p-4 text-sm text-slate-700">加载中…</div>
         ) : rows.length === 0 ? (
           <div className="p-4 text-sm text-slate-600">暂无平台，请先到「添加文档 URL」录入或从「设置」导入知识库。</div>
         ) : (
@@ -1550,13 +1584,13 @@ function DocCheckPage() {
       {data && (
         <>
           <div className={card}>
-            <div className="text-xs text-slate-500">检测时间（UTC）</div>
+            <div className="text-xs text-slate-700">检测时间（UTC）</div>
             <div className="mt-1 font-mono text-sm">{data.checkedAt}</div>
             <div className="mt-3 grid grid-cols-2 gap-2 text-sm md:grid-cols-4">
-              <div><span className="text-slate-500">总计</span> <span className="font-semibold tabular-nums">{data.summary.total}</span></div>
-              <div><span className="text-slate-500">有变化</span> <span className="font-semibold tabular-nums text-amber-700">{data.summary.changed}</span></div>
-              <div><span className="text-slate-500">未变化</span> <span className="font-semibold tabular-nums text-green-700">{data.summary.unchanged}</span></div>
-              <div><span className="text-slate-500">错误</span> <span className="font-semibold tabular-nums text-red-600">{data.summary.errors}</span></div>
+              <div><span className="text-slate-700">总计</span> <span className="font-semibold tabular-nums">{data.summary.total}</span></div>
+              <div><span className="text-slate-700">有变化</span> <span className="font-semibold tabular-nums text-amber-700">{data.summary.changed}</span></div>
+              <div><span className="text-slate-700">未变化</span> <span className="font-semibold tabular-nums text-green-700">{data.summary.unchanged}</span></div>
+              <div><span className="text-slate-700">错误</span> <span className="font-semibold tabular-nums text-red-600">{data.summary.errors}</span></div>
             </div>
           </div>
 
@@ -1637,7 +1671,7 @@ function DocCheckPage() {
                 {diffMut.data.markdownTruncated ? " · 正文过长已截断后参与 diff" : ""}
                 {diffMut.data.unifiedDiffTruncated ? " · diff 输出已截断" : ""}
               </p>
-              <pre className="mt-3 max-h-[28rem] overflow-auto whitespace-pre rounded-md border border-slate-200 bg-slate-900 p-3 text-xs text-slate-100">
+              <pre className="mt-3 max-h-[28rem] overflow-auto whitespace-pre rounded-md border border-slate-200 bg-slate-900 p-3 text-xs text-slate-900">
                 {diffMut.data.unifiedDiff.trim() || "（无行间差异）"}
               </pre>
             </div>
@@ -2316,25 +2350,25 @@ function ConnectPage() {
             </div>
             <dl className="grid gap-2 text-sm md:grid-cols-2">
               <div>
-                <dt className="text-xs text-slate-500">Base URL（接口根地址）</dt>
+                <dt className="text-xs text-slate-700">Base URL（接口根地址）</dt>
                 <dd className="break-all font-mono text-xs">{render.resolvedBaseUrl}</dd>
               </div>
               <div>
-                <dt className="text-xs text-slate-500">鉴权（密钥写法）</dt>
+                <dt className="text-xs text-slate-700">鉴权（密钥写法）</dt>
                 <dd>
                   {render.authType} · {render.authHeaderName || "—"} · <span className="font-mono text-xs">{render.authHeaderTemplate}</span>
                 </dd>
               </div>
               <div className="md:col-span-2">
-                <dt className="text-xs text-slate-500">Model Name Rule（模型名规则）</dt>
+                <dt className="text-xs text-slate-700">Model Name Rule（模型名规则）</dt>
                 <dd>{render.modelNameRule}</dd>
               </div>
               <div>
-                <dt className="text-xs text-slate-500">Resolved Model Name（当前解析模型名）</dt>
+                <dt className="text-xs text-slate-700">Resolved Model Name（当前解析模型名）</dt>
                 <dd className="font-mono text-xs">{render.resolvedModelName || "（未指定）"}</dd>
               </div>
               <div>
-                <dt className="text-xs text-slate-500">Capability Hints（能力提示）</dt>
+                <dt className="text-xs text-slate-700">Capability Hints（能力提示）</dt>
                 <dd>{render.capabilityHints.join(" · ")}</dd>
               </div>
             </dl>
